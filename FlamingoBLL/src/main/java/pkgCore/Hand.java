@@ -3,49 +3,68 @@ package pkgCore;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import pkgEnum.eRank;
+
 public class Hand {
 
 	private int iScore;
 	private ArrayList<Card> cards = new ArrayList<Card>();
-	
-	public Hand()
-	{
-		
+
+	public Hand() {
 	}
-	
-	public int[] ScoreHand()
-	{
-		int [] iScore = new int[2];
-		
-		iScore[0] = 5;
-		iScore[1] = 10;
-		
+
+	public int[] ScoreHand() {
+		int[] iScore = new int[2];
+
+		iScore[0] = 0;
+		iScore[1] = 0;
+		boolean bAce = false;
+
 		Collections.sort(cards);
-		
-		
-		for (Card c: cards)
-		{
-			//	TODO: Determine the score.  
-			//			Cards:
-			//			2-3-4 - score = 11
-			//			5-J-Q - score = 25
-			//			5-6-7-2 - score = 20
-			//			J-Q	- score = 20
-			//			8-A = score = 9 or 19
-			//			4-A = score = 5 or 15
+
+		for (Card c : cards) {
+
+			if (c.geteRank() == eRank.ACE) {
+				bAce = true;
+			}
+			switch (c.geteRank()) {
+			case TWO:
+			case THREE:
+			case FOUR:
+			case FIVE:
+			case SIX:
+			case SEVEN:
+			case EIGHT:
+			case NINE:
+			case TEN:
+				iScore[0] = iScore[0] + c.geteRank().getiRankNbr();
+				iScore[1] = iScore[1] + c.geteRank().getiRankNbr();
+				break;
+
+			case JACK:
+			case QUEEN:
+			case KING:
+				iScore[0] = iScore[0] + 10;
+				iScore[1] = iScore[1] + 10;
+				break;
+
+			case ACE:
+				iScore[0] = iScore[0] + 1;
+				iScore[1] = iScore[1] + 11;
+				break;
+			}
+
 		}
-		
+
 		return iScore;
 	}
-	
-	public void Draw(Deck d)
-	{
-		//	TODO: add a card to 'cards' from a card drawn from Deck d
+
+	public void Draw(Deck d) {
+		cards.add(d.draw());
 	}
-	
-	private void AddCard(Card c)
-	{
+
+	private void AddCard(Card c) {
 		cards.add(c);
 	}
-	
+
 }
